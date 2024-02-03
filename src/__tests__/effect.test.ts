@@ -133,4 +133,14 @@ describe('createEffect', () => {
     setNested(1);
     expect(effect).toHaveBeenCalledTimes(2);
   });
+
+  it('pops the effect stack even if the effect throws an error', () => {
+    const effect = () => {
+      throw new Error('test');
+    };
+
+    expect(() => createEffect(effect)).toThrow('test');
+
+    expect(effectStack).toHaveLength(0);
+  });
 });

@@ -7,23 +7,25 @@ export const createEffect = (effect: Effect) => {
   const runEffect = () => {
     cleanup?.();
 
-    const newDependencies = new Set<SubscribeToSignal>();
-    const tombstones = new Map(dependencies);
+    try {
+      const newDependencies = new Set<SubscribeToSignal>();
+      const tombstones = new Map(dependencies);
 
-    effectStack.push((subscribe) => newDependencies.add(subscribe));
-    cleanup = effect();
+      effectStack.push((subscribe) => newDependencies.add(subscribe));
+      cleanup = effect();
 
-    // Subscribe to new dependencies.
-    newDependencies.forEach((subscribe) => {
-      tombstones.delete(subscribe);
-      if (dependencies.has(subscribe)) return;
-      dependencies.set(subscribe, subscribe(runEffect));
-    });
+      // Subscribe to new dependencies.
+      newDependencies.forEach((subscribe) => {
+        tombstones.delete(subscribe);
+        if (dependencies.has(subscribe)) return;
+        dependencies.set(subscribe, subscribe(runEffect));
+      });
 
-    // Unsubscribe from unused dependencies.
-    tombstones.forEach((dispose) => dispose());
-
-    effectStack.pop();
+      // Unsubscribe from unused dependencies.
+      tombstones.forEach((dispose) => dispose());
+    } finally {
+      effectStack.pop();
+    }
   };
 
   runEffect();
