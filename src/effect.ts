@@ -32,6 +32,7 @@ export const createEffect = (effect: Effect) => {
 
   return function dispose() {
     dependencies.forEach((dispose) => dispose());
+    cleanup?.();
   };
 };
 

@@ -80,6 +80,15 @@ describe('createEffect', () => {
     expect(cleanup).toHaveBeenCalled();
   });
 
+  it('runs the cleanup handler after disposing of the effect', () => {
+    const cleanup = vi.fn();
+    const dispose = createEffect(() => cleanup);
+
+    expect(cleanup).not.toHaveBeenCalled();
+    dispose();
+    expect(cleanup).toHaveBeenCalled();
+  });
+
   it('only subscribes to the same signal once', () => {
     const [value, setValue] = createSignal(0);
 
