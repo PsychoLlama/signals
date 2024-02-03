@@ -1,31 +1,27 @@
-import { SubscribeToSignal } from './signal';
+import { collectDependencies } from './dependencies';
+import { SignalRef } from './signal';
 
 export const createEffect = (effect: Effect) => {
-  const dependencies = new Map<SubscribeToSignal, Unsubscribe>();
+  const dependencies = new Map<SignalRef, Unsubscribe>();
   let cleanup: ReturnType<Effect>;
 
   const runEffect = () => {
     cleanup?.();
 
-    try {
-      const newDependencies = new Set<SubscribeToSignal>();
-      const tombstones = new Map(dependencies);
-
-      effectStack.push((subscribe) => newDependencies.add(subscribe));
+    const tombstones = new Map(dependencies);
+    const newDependencies = collectDependencies(() => {
       cleanup = effect();
+    });
 
-      // Subscribe to new dependencies.
-      newDependencies.forEach((subscribe) => {
-        tombstones.delete(subscribe);
-        if (dependencies.has(subscribe)) return;
-        dependencies.set(subscribe, subscribe(runEffect));
-      });
+    // Subscribe to new dependencies.
+    newDependencies.forEach((handle) => {
+      tombstones.delete(handle);
+      if (dependencies.has(handle)) return;
+      dependencies.set(handle, handle.s(runEffect));
+    });
 
-      // Unsubscribe from unused dependencies.
-      tombstones.forEach((dispose) => dispose());
-    } finally {
-      effectStack.pop();
-    }
+    // Unsubscribe from unused dependencies.
+    tombstones.forEach((dispose) => dispose());
   };
 
   runEffect();
@@ -36,16 +32,10 @@ export const createEffect = (effect: Effect) => {
   };
 };
 
-export const effectStack: CurrentEffect[] = [];
-
 interface Effect {
   (): void | (() => void);
 }
 
 interface Unsubscribe {
   (): void;
-}
-
-interface CurrentEffect {
-  (subscribeToSignal: SubscribeToSignal): void;
 }

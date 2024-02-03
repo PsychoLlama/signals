@@ -1,27 +1,32 @@
-import { effectStack } from './effect';
+import { callstack } from './dependencies';
 
 export const createSignal = <Value>(initialValue: Value): Signal<Value> => {
   let value = initialValue;
+  let version = 0;
 
   const observers = new Set<Callback>();
-  const subscribeToSignal: SubscribeToSignal = (subscriber) => {
-    observers.add(subscriber);
+  const signal: SignalRef = {
+    v: () => version,
+    s: (callback) => {
+      observers.add(callback);
 
-    return () => {
-      observers.delete(subscriber);
-    };
+      return () => {
+        observers.delete(callback);
+      };
+    },
   };
 
   return [
     function getValue() {
-      const currentEffect = effectStack[effectStack.length - 1];
-      currentEffect?.(subscribeToSignal);
+      const currentEffect = callstack[callstack.length - 1];
+      currentEffect?.(signal);
 
       return value;
     },
 
     function setValue(newValue) {
       value = newValue;
+      version++;
 
       observers.forEach((subscriber) => {
         subscriber();
@@ -38,8 +43,16 @@ type Signal<Value> = [
   setValue: (newValue: Value) => void,
 ];
 
-export interface SubscribeToSignal {
-  (callback: Callback): () => void;
+/**
+ * A handle for inspecting and operating on signals. Fields are short because
+ * minifiers cannot safely rename them.
+ */
+export interface SignalRef {
+  /** Subscribe to changes. Returns an unsubscribe callback. */
+  s: (callback: Callback) => () => void;
+
+  /** Get the incrementing version number. Used for caching. */
+  v: () => number;
 }
 
 export interface Callback {

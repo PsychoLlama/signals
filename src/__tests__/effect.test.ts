@@ -1,5 +1,5 @@
 import { createEffect, createSignal } from '../';
-import { effectStack } from '../effect';
+import { callstack } from '../dependencies';
 
 describe('createEffect', () => {
   it('runs the effect immediately', () => {
@@ -107,19 +107,19 @@ describe('createEffect', () => {
   });
 
   it('pushes and pops the effect stack according to nesting', () => {
-    expect(effectStack).toHaveLength(0);
+    expect(callstack).toHaveLength(0);
     createEffect(() => {
-      expect(effectStack).toHaveLength(1);
+      expect(callstack).toHaveLength(1);
       createEffect(() => {
-        expect(effectStack).toHaveLength(2);
+        expect(callstack).toHaveLength(2);
         createEffect(() => {
-          expect(effectStack).toHaveLength(3);
+          expect(callstack).toHaveLength(3);
         });
-        expect(effectStack).toHaveLength(2);
+        expect(callstack).toHaveLength(2);
       });
-      expect(effectStack).toHaveLength(1);
+      expect(callstack).toHaveLength(1);
     });
-    expect(effectStack).toHaveLength(0);
+    expect(callstack).toHaveLength(0);
   });
 
   it('does not corrupt dependencies if the effect throws an error', () => {
@@ -150,6 +150,6 @@ describe('createEffect', () => {
 
     expect(() => createEffect(effect)).toThrow('test');
 
-    expect(effectStack).toHaveLength(0);
+    expect(callstack).toHaveLength(0);
   });
 });
