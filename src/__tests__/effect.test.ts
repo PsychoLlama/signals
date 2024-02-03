@@ -152,4 +152,18 @@ describe('createEffect', () => {
 
     expect(callstack).toHaveLength(0);
   });
+
+  it('only runs the effect if the signal value actually changed', () => {
+    const [count, setCount] = createSignal(0);
+
+    const effect = vi.fn(() => {
+      count();
+    });
+
+    createEffect(effect);
+
+    expect(effect).toHaveBeenCalledTimes(1);
+    setCount(0);
+    expect(effect).toHaveBeenCalledTimes(1);
+  });
 });

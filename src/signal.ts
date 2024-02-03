@@ -25,6 +25,8 @@ export const createSignal = <Value>(initialValue: Value): Signal<Value> => {
     },
 
     function setValue(newValue) {
+      if (value === newValue) return;
+
       value = newValue;
       version++;
 
