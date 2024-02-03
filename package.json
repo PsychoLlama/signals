@@ -1,0 +1,86 @@
+{
+  "name": "@psychollama/signals",
+  "version": "0.0.0",
+  "description": "A reactive state management tool",
+  "author": "Jesse Gibson <JesseTheGibson@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "module": "./dist/signals.js",
+  "main": "./dist/signals.umd.cjs",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/signals.umd.cjs",
+      "import": "./dist/signals.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "structured",
+    "ui",
+    "framework"
+  ],
+  "scripts": {
+    "prepare": "vite build",
+    "test": "./bin/run-tests",
+    "test:unit": "vitest",
+    "test:lint": "eslint src --ext ts --color",
+    "test:fmt": "prettier --check src"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.tsx?": [
+      "eslint",
+      "prettier --check"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "overrides": [
+      {
+        "files": [
+          "./**/__tests__/*.ts{x,}"
+        ],
+        "env": {
+          "jest": true
+        },
+        "rules": {
+          "@typescript-eslint/no-explicit-any": "off"
+        }
+      }
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/no-use-before-define": "off"
+    }
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.55.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.4",
+    "vitest": "^0.34.6"
+  }
+}
