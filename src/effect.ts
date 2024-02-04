@@ -1,8 +1,11 @@
-import { collectDependencies } from './dependencies';
-import { SignalRef } from './signal';
+import {
+  collectDependencies,
+  DependencyRef,
+  Unsubscribe,
+} from './dependencies';
 
 export const createEffect = (effect: Effect) => {
-  const dependencies = new Map<SignalRef, Unsubscribe>();
+  const dependencies = new Map<DependencyRef, Unsubscribe>();
   let cleanup: ReturnType<Effect>;
 
   const runEffect = () => {
@@ -33,9 +36,9 @@ export const createEffect = (effect: Effect) => {
 };
 
 interface Effect {
-  (): void | (() => void);
+  (): void | Cleanup;
 }
 
-interface Unsubscribe {
+interface Cleanup {
   (): void;
 }

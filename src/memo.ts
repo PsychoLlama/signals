@@ -1,9 +1,8 @@
-import { collectDependencies } from './dependencies';
-import { SignalRef } from './signal';
+import { collectDependencies, DependencyRef } from './dependencies';
 
 export const createMemo = <Value>(selector: Selector<Value>) => {
   let cache: [version: VersionSnapshot, value: Value];
-  let deps: Set<SignalRef>;
+  let deps: Set<DependencyRef>;
   let value: Value;
 
   const getVersionSnapshot = (): VersionSnapshot => {
@@ -45,4 +44,4 @@ interface Selector<Value> {
   (): Value;
 }
 
-type VersionSnapshot = Map<SignalRef, number>;
+type VersionSnapshot = Map<DependencyRef, number>;
