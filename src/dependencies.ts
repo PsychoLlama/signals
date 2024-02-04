@@ -1,3 +1,5 @@
+import { queueBatchedTask } from './batch';
+
 export const callstack: DependencyCollector[] = [];
 
 export const collectDependencies = (callback: Callback): Set<DependencyRef> => {
@@ -39,7 +41,7 @@ export const createRef = (): [ref: DependencyRef, onChange: Callback] => {
     ref,
     function onChange() {
       version++;
-      observers.forEach((callback) => callback());
+      observers.forEach(queueBatchedTask);
     },
   ];
 };
