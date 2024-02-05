@@ -22,17 +22,28 @@ export const trackDependency = (ref: DependencyRef) => {
 };
 
 /** Create a dependency reference. This is used to track changes. */
-export const createRef = (): [ref: DependencyRef, onChange: Callback] => {
+export const createRef = (
+  effect?: () => Unsubscribe
+): [ref: DependencyRef, onChange: Callback] => {
   const observers = new Set<Callback>();
   let version = 0;
+  let cleanup: Unsubscribe | undefined;
 
   const ref: DependencyRef = {
     v: () => version,
     s: (callback) => {
+      if (observers.size === 0) {
+        cleanup = effect?.();
+      }
+
       observers.add(callback);
 
       return () => {
         observers.delete(callback);
+
+        if (observers.size === 0) {
+          cleanup?.();
+        }
       };
     },
   };

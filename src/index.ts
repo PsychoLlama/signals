@@ -1,4 +1,4 @@
 export { batch } from './batch';
 export { createEffect } from './effect';
-export { createMemo } from './memo';
+export { createSelector } from './selector';
 export { createSignal } from './signal';
