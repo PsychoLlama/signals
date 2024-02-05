@@ -17,10 +17,10 @@ export const createEffect = (effect: Effect) => {
     });
 
     // Subscribe to new dependencies.
-    newDependencies.forEach((handle) => {
-      tombstones.delete(handle);
-      if (dependencies.has(handle)) return;
-      dependencies.set(handle, handle.s(runEffect));
+    newDependencies.forEach((subscribe) => {
+      tombstones.delete(subscribe);
+      if (dependencies.has(subscribe)) return;
+      dependencies.set(subscribe, subscribe(runEffect));
     });
 
     // Unsubscribe from unused dependencies.

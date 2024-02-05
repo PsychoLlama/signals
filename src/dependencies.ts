@@ -26,32 +26,27 @@ export const createRef = (
   effect?: () => Unsubscribe
 ): [ref: DependencyRef, onChange: Callback] => {
   const observers = new Set<Callback>();
-  let version = 0;
   let cleanup: Unsubscribe | undefined;
 
-  const ref: DependencyRef = {
-    v: () => version,
-    s: (callback) => {
+  const ref: DependencyRef = (callback) => {
+    if (observers.size === 0) {
+      cleanup = effect?.();
+    }
+
+    observers.add(callback);
+
+    return () => {
+      observers.delete(callback);
+
       if (observers.size === 0) {
-        cleanup = effect?.();
+        cleanup?.();
       }
-
-      observers.add(callback);
-
-      return () => {
-        observers.delete(callback);
-
-        if (observers.size === 0) {
-          cleanup?.();
-        }
-      };
-    },
+    };
   };
 
   return [
     ref,
     function onChange() {
-      version++;
       observers.forEach(queueBatchedTask);
     },
   ];
@@ -63,10 +58,7 @@ interface DependencyCollector {
 
 export interface DependencyRef {
   /** Subscribe to changes. Returns an unsubscribe callback. */
-  s: (callback: Callback) => Unsubscribe;
-
-  /** Get the incrementing version number. Used for caching. */
-  v: () => number;
+  (callback: Callback): Unsubscribe;
 }
 
 export interface Callback {
