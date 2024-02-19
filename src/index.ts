@@ -1,3 +1,4 @@
+export type { Signal } from './signal';
 export { batch } from './batch';
 export { createEffect } from './effect';
 export { createSelector } from './selector';

@@ -1,8 +1,11 @@
-import { trackDependency, createRef } from './dependencies';
+import { trackDependency, createRef, Unsubscribe } from './dependencies';
 
-export const createSignal = <Value>(initialValue: Value): Signal<Value> => {
+export const createSignal = <Value>(
+  initialValue: Value,
+  effect?: () => Unsubscribe
+): Signal<Value> => {
   let value = initialValue;
-  const [signal, onChange] = createRef();
+  const [signal, onChange] = createRef(effect);
 
   return [
     function getValue() {
@@ -19,7 +22,7 @@ export const createSignal = <Value>(initialValue: Value): Signal<Value> => {
   ];
 };
 
-type Signal<Value> = [
+export type Signal<Value> = [
   /** Get the current value of the signal. */
   getValue: () => Value,
 
