@@ -2,6 +2,7 @@ import { queueBatchedTask } from './batch';
 
 export const callstack: DependencyCollector[] = [];
 
+/** Determine what refs are used inside a callback. */
 export const collectDependencies = (callback: Callback): Set<DependencyRef> => {
   const dependencies = new Set<DependencyRef>();
   callstack.push((subscribe) => dependencies.add(subscribe));

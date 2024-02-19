@@ -1,5 +1,9 @@
 import { Callback } from './dependencies';
 
+/**
+ * Apply multiple changes at once, deferring any effects until the batch is
+ * complete.
+ */
 export const batch = <Value>(callback: () => Value): Value => {
   if (currentBatch !== null) {
     return callback();

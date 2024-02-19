@@ -1,6 +1,10 @@
 import { createRef, trackDependency, callstack } from './dependencies';
 import { createEffect } from './effect';
 
+/**
+ * Selectors compose signals or other selectors into a new value. Effects
+ * using the selector will re-run when the value changes.
+ */
 export const createSelector = <Value>(selector: Selector<Value>) => {
   let value: Value;
 

@@ -1,5 +1,13 @@
 import { trackDependency, createRef, Unsubscribe } from './dependencies';
 
+/**
+ * A value that can be read and written. Effects that use the signal will
+ * re-run when the value changes.
+ *
+ * Optionally you can provide an effect that runs when the signal starts being
+ * observed, and stops when the last observer is removed. This is useful to
+ * set up listeners to external sources, like DOM events or URL changes.
+ */
 export const createSignal = <Value>(
   initialValue: Value,
   effect?: () => Unsubscribe
