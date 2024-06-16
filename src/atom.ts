@@ -2,15 +2,15 @@ import { Signal } from 'signal-polyfill';
 import { finalizationQueue } from './transaction';
 
 export const atom = <Value>(initialState: Value): Atom<Value> => {
-  const signal = new Signal.State(initialState);
-  let uncommittedState = initialState;
+  const state = new Signal.State(initialState);
+  const staged = new Signal.State(initialState);
 
   const getState = () => {
     if (finalizationQueue === null) {
-      return signal.get();
+      return state.get();
     }
 
-    return uncommittedState;
+    return staged.get();
   };
 
   const setState = (newState: Value) => {
@@ -18,12 +18,13 @@ export const atom = <Value>(initialState: Value): Atom<Value> => {
       throw new Error('Atoms can only be updated in an action().');
     }
 
-    uncommittedState = newState;
+    staged.set(newState);
+
     finalizationQueue.push((commit) => {
       if (commit) {
-        signal.set(newState);
+        state.set(newState);
       } else {
-        uncommittedState = signal.get();
+        staged.set(state.get());
       }
     });
   };
