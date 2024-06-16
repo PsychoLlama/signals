@@ -43,5 +43,8 @@
     "vite": "^5.0.4",
     "vite-plugin-dts": "^3.9.1",
     "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "signal-polyfill": "^0.1.1"
   }
 }
