@@ -1,7 +1,6 @@
 import {
-  abortTransaction,
-  commitTransaction,
   finalizationQueue,
+  finishTransaction,
   startTransaction,
 } from './transaction';
 
@@ -19,11 +18,11 @@ export const action = <Params extends Array<unknown>, ReturnValue>(
     try {
       startTransaction();
       const result = handler(...params);
-      commitTransaction();
+      finishTransaction(true);
 
       return result;
     } catch (error) {
-      abortTransaction();
+      finishTransaction(false);
       throw error;
     }
   };

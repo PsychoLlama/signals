@@ -5,13 +5,9 @@ export const startTransaction = () => {
   finalizationQueue = [];
 };
 
-export const commitTransaction = () => {
-  finalizationQueue!.forEach((finalize) => finalize());
+export const finishTransaction = (commit: boolean) => {
+  finalizationQueue!.forEach((finalize) => finalize(commit));
   finalizationQueue = null;
 };
 
-export const abortTransaction = () => {
-  finalizationQueue = null;
-};
-
-type FinalizationQueue = Array<() => void>;
+type FinalizationQueue = Array<(commit: boolean) => void>;
