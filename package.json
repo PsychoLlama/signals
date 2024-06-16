@@ -1,12 +1,14 @@
 {
-  "name": "@psychollama/signals",
-  "version": "0.0.0",
+  "name": "@pl-beta/signals",
+  "version": "0.0.0-rc.0",
   "description": "A reactive state management tool",
   "author": "Jesse Gibson <JesseTheGibson@gmail.com>",
   "license": "MIT",
-  "private": true,
   "type": "module",
   "types": "./dist/signals.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "require": "./dist/signals.umd.cjs",
