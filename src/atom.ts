@@ -1,6 +1,7 @@
 import { Signal } from 'signal-polyfill';
 import { finalizationQueue } from './transaction';
 
+/** Creates a mutable reactive value. */
 export const atom = <Value>(initialState: Value): Atom<Value> => {
   const state = new Signal.State(initialState);
   const staged = new Signal.State(initialState);

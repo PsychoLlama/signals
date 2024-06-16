@@ -1,11 +1,16 @@
 import { Signal } from 'signal-polyfill';
 import { finalizationQueue } from './transaction';
 
-export const selector = <T>(deriver: () => T): Selector<T> => {
+/**
+ * Compute and cache a value. Selectors are cached by the atoms they use. If
+ * the atoms change, the selector will recompute the value the next time it is
+ * called.
+ */
+export const selector = <Value>(deriver: () => Value): Selector<Value> => {
   const committed = new Signal.Computed(deriver);
   const staged = new Signal.Computed(deriver);
 
-  const deriveState = () => {
+  return () => {
     if (finalizationQueue === null) {
       return committed.get();
     } else {
@@ -17,8 +22,6 @@ export const selector = <T>(deriver: () => T): Selector<T> => {
       return staged.get();
     }
   };
-
-  return deriveState;
 };
 
-export type Selector<T> = () => T;
+export type Selector<Value> = () => Value;

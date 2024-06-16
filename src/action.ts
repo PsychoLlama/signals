@@ -5,7 +5,8 @@ import {
 } from './transaction';
 
 /**
- * Perform an action that updates state all at once.
+ * Transactionally apply a set of changes. Actions should happen in response
+ * to IO events. They cannot be nested.
  */
 export const action = <Params extends Array<unknown>, ReturnValue>(
   handler: (...args: Params) => ReturnValue
