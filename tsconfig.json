@@ -11,6 +11,7 @@
     "noUnusedParameters": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["vitest/globals"],
-  },
+    "resolveJsonModule": true,
+    "types": ["vitest/globals"]
+  }
 }
