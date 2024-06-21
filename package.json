@@ -1,6 +1,6 @@
 {
   "name": "@pl-beta/signals",
-  "version": "0.0.0-rc.0",
+  "version": "0.0.0-rc.1",
   "description": "A reactive state management tool",
   "author": "Jesse Gibson <JesseTheGibson@gmail.com>",
   "license": "MIT",
