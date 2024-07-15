@@ -10,14 +10,24 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/signals.d.ts",
-      "require": "./dist/signals.umd.cjs",
-      "import": "./dist/signals.js"
+      "require": {
+        "types": "./dist/signals.d.ts",
+        "default": "./dist/signals.umd.cjs"
+      },
+      "import": {
+        "types": "./dist/signals.d.ts",
+        "default": "./dist/signals.js"
+      }
     },
     "./react": {
-      "types": "./dist/react.d.ts",
-      "require": "./dist/react.umd.cjs",
-      "import": "./dist/react.js"
+      "require": {
+        "types": "./dist/react.d.ts",
+        "default": "./dist/react.umd.cjs"
+      },
+      "import": {
+        "types": "./dist/react.d.ts",
+        "default": "./dist/react.js"
+      }
     }
   },
   "files": [
