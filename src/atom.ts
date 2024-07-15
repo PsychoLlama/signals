@@ -1,42 +1,27 @@
 import { Signal } from 'signal-polyfill';
-import { finalizationQueue } from './transaction';
 
-/** Creates a mutable reactive value. */
-export const atom = <Value>(initialState: Value): Atom<Value> => {
-  const state = new Signal.State(initialState);
-  const staged = new Signal.State(initialState);
+/**
+ * Store a single value. Values can be read or replaced. Use `swap` to replace
+ * the value inside an action.
+ *
+ * Reading state in a selector or effect will subscribe to changes.
+ */
+export const atom = <Value>(initialState: Value): Atom<Value> =>
+  Object.defineProperties({} as Atom<Value>, {
+    _s: { value: new Signal.State(initialState) },
+    _c: { value: new Signal.State(initialState) },
+  });
 
-  const getState = () => {
-    if (finalizationQueue === null) {
-      return state.get();
-    }
+export interface Atom<Value> {
+  /**
+   * Staged value used during transactions.
+   * @private
+   */
+  _s: Signal.State<Value>;
 
-    return staged.get();
-  };
-
-  const setState = (newState: Value) => {
-    if (finalizationQueue === null) {
-      throw new Error('Atoms can only be updated in an action().');
-    }
-
-    staged.set(newState);
-
-    finalizationQueue.push((commit) => {
-      if (commit) {
-        state.set(newState);
-      } else {
-        staged.set(state.get());
-      }
-    });
-  };
-
-  return [getState, setState];
-};
-
-export type Atom<Value> = [
-  /** Get the current state. */
-  getState: () => Value,
-
-  /** Replace the current state. */
-  setState: (newState: Value) => void,
-];
+  /**
+   * Committed value.
+   * @private
+   */
+  _c: Signal.State<Value>;
+}
