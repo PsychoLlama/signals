@@ -28,6 +28,16 @@
         "types": "./dist/react.d.ts",
         "default": "./dist/react.js"
       }
+    },
+    "./immer": {
+      "require": {
+        "types": "./dist/immer.d.ts",
+        "default": "./dist/immer.umd.cjs"
+      },
+      "import": {
+        "types": "./dist/immer.d.ts",
+        "default": "./dist/immer.js"
+      }
     }
   },
   "files": [
@@ -56,6 +66,7 @@
     "@types/eslint__js": "^8.42.3",
     "@types/react": "^18.3.3",
     "eslint": "^8.57.0",
+    "immer": "^10.1.1",
     "jsdom": "^24.1.0",
     "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",
@@ -70,9 +81,13 @@
     "signal-polyfill": "^0.1.1"
   },
   "peerDependencies": {
+    "immer": ">=10.0.0",
     "react": ">=18.0.0"
   },
   "peerDependenciesMeta": {
+    "immer": {
+      "optional": true
+    },
     "react": {
       "optional": true
     }

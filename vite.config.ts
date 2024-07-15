@@ -16,6 +16,7 @@ export default defineConfig({
       entry: {
         signals: path.join(import.meta.dirname, './src/index.ts'),
         react: path.join(import.meta.dirname, './src/bindings/react/index.ts'),
+        immer: path.join(import.meta.dirname, './src/bindings/immer/index.ts'),
       },
     },
     rollupOptions: {
