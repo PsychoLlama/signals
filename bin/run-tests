@@ -3,7 +3,7 @@ set -euo pipefail
 
 fail=
 
-npm run test:unit || fail=1
+npm run test:unit -- --run || fail=1
 npm run test:lint || fail=1
 npm run test:fmt || fail=1
 
