@@ -5,14 +5,19 @@
   "author": "Jesse Gibson <JesseTheGibson@gmail.com>",
   "license": "MIT",
   "type": "module",
-  "types": "./dist/signals.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "exports": {
     ".": {
+      "types": "./dist/signals.d.ts",
       "require": "./dist/signals.umd.cjs",
       "import": "./dist/signals.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "require": "./dist/react.umd.cjs",
+      "import": "./dist/react.js"
     }
   },
   "files": [
@@ -37,6 +42,7 @@
   "devDependencies": {
     "@eslint/js": "^9.5.0",
     "@types/eslint__js": "^8.42.3",
+    "@types/react": "^18.3.3",
     "eslint": "^8.57.0",
     "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",
@@ -48,5 +54,13 @@
   },
   "dependencies": {
     "signal-polyfill": "^0.1.1"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   }
 }

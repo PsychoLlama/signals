@@ -3,16 +3,23 @@ import * as path from 'path';
 import dts from 'vite-plugin-dts';
 import pkg from './package.json';
 
+const external = [
+  ...Object.keys(pkg.dependencies),
+  ...Object.keys(pkg.peerDependencies),
+  pkg.name,
+];
+
 export default defineConfig({
   plugins: [dts({ rollupTypes: true })],
   build: {
     lib: {
-      entry: path.join(import.meta.dirname, './src/index.ts'),
-      name: 'signals',
-      fileName: 'signals',
+      entry: {
+        signals: path.join(import.meta.dirname, './src/index.ts'),
+        react: path.join(import.meta.dirname, './src/bindings/react/index.ts'),
+      },
     },
     rollupOptions: {
-      external: Object.keys(pkg.dependencies),
+      external,
       output: {
         exports: 'named',
       },

@@ -12,6 +12,9 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "paths": {
+      "@pl-beta/signals": ["./src/index.ts"]
+    }
   }
 }
