@@ -11,7 +11,7 @@ function flushPendingChanges() {
 /**
  * Get the value of an atom or computed and subscribe to changes.
  */
-export const useSelector = <Value>(
+export const useValue = <Value>(
   store: Atom<Value> | Computed<Value>
 ): Value => {
   const [subscribe, getSnapshot] = useMemo(() => {

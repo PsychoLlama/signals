@@ -5,9 +5,9 @@
 import React from 'react';
 import { render, act } from '@testing-library/react';
 import { atom, action, swap, computed, Atom, get } from '../../../';
-import { useSelector } from '../';
+import { useValue } from '../';
 
-describe('useSelector', () => {
+describe('useValue', () => {
   function setup(getValue?: ($msg: Atom<string>) => string) {
     const $msg = atom('initial message');
 
@@ -15,7 +15,7 @@ describe('useSelector', () => {
       swap($msg, value);
     });
 
-    getValue ??= useSelector;
+    getValue ??= useValue;
     const Test = () => {
       const msg = getValue($msg);
       return <div>{msg}</div>;
@@ -60,7 +60,7 @@ describe('useSelector', () => {
         []
       );
 
-      return useSelector(derived);
+      return useValue(derived);
     });
 
     expect(result.container).toHaveTextContent('INITIAL MESSAGE');

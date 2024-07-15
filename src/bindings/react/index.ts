@@ -1,1 +1,1 @@
-export { useSelector } from './use-selector';
+export { useValue } from './use-value';
