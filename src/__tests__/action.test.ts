@@ -15,7 +15,7 @@ describe('action', () => {
 
   it('fails if you dispatch an action within another action', () => {
     const outer = action(() => inner());
-    const inner = action(() => { });
+    const inner = action(() => {});
 
     expect(outer).toThrow(/inside other actions/);
   });

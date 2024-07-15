@@ -1,32 +1,32 @@
 import { Signal } from 'signal-polyfill';
-import { atom, action, selector, get, swap } from '../';
+import { atom, action, computed, get, swap } from '../';
 
-describe('selector', () => {
+describe('computed', () => {
   it('returns the computed state', () => {
     const count = atom(0);
-    const add1 = selector(() => get(count) + 1);
+    const add1 = computed(() => get(count) + 1);
 
     expect(get(add1)).toBe(1);
   });
 
   it('caches values between invocations', () => {
-    const computed = selector(() => {
+    const $value = computed(() => {
       return { object: 'equal' };
     });
 
-    expect(get(computed)).toBe(get(computed));
+    expect(get($value)).toBe(get($value));
   });
 
   it('detects changes to the source atoms', () => {
     const count = atom(0);
-    const add1 = selector(() => get(count) + 1);
+    const add1 = computed(() => get(count) + 1);
 
-    const computed = new Signal.Computed(() => get(add1));
-    computed.get(); // Compute and cache dependencies.
+    const query = new Signal.Computed(() => get(add1));
+    query.get(); // Compute and cache dependencies.
 
     const spy = vi.fn();
     const watcher = new Signal.subtle.Watcher(spy);
-    watcher.watch(computed);
+    watcher.watch(query);
 
     const update = action(() => {
       swap(count, get(count) + 1);
@@ -39,14 +39,14 @@ describe('selector', () => {
 
   it('does not detect changes from failed transactions', () => {
     const count = atom(0);
-    const add1 = selector(() => get(count) + 1);
+    const add1 = computed(() => get(count) + 1);
 
-    const computed = new Signal.Computed(() => get(add1));
-    computed.get(); // Compute and cache dependencies.
+    const query = new Signal.Computed(() => get(add1));
+    query.get(); // Compute and cache dependencies.
 
     const spy = vi.fn();
     const watcher = new Signal.subtle.Watcher(spy);
-    watcher.watch(computed);
+    watcher.watch(query);
 
     const update = action(() => {
       swap(count, get(count) + 1);
@@ -60,14 +60,14 @@ describe('selector', () => {
 
   it('maintains consistent dependencies through transactions', () => {
     const count = atom(0);
-    const add1 = selector(() => get(count) + 1);
+    const add1 = computed(() => get(count) + 1);
 
-    const computed = new Signal.Computed(() => get(add1));
-    computed.get(); // Compute and cache dependencies.
+    const query = new Signal.Computed(() => get(add1));
+    query.get(); // Compute and cache dependencies.
 
     const changeDetector = vi.fn();
     const watcher = new Signal.subtle.Watcher(changeDetector);
-    watcher.watch(computed);
+    watcher.watch(query);
 
     const update = action((fail: boolean) => {
       expect(get(add1)).toBe(1);
@@ -87,20 +87,20 @@ describe('selector', () => {
   });
 
   it('caches values between invocations inside transactions', () => {
-    const computed = selector(() => {
+    const value = computed(() => {
       return { object: 'equal' };
     });
 
     const update = action(() => {
-      expect(get(computed)).toBe(get(computed));
-      return get(computed);
+      expect(get(value)).toBe(get(value));
+      return get(value);
     });
 
     expect(update).not.toThrow();
 
-    // Testing internal implementation: A different selector is used if you're
+    // Testing internal implementation: A different computed is used if you're
     // inside a transaction in order to use the staged values without altering
-    // dependencies of the outer selector.
-    expect(update()).not.toBe(get(computed));
+    // dependencies of the outer computed.
+    expect(update()).not.toBe(get(value));
   });
 });

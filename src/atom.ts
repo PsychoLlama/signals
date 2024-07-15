@@ -4,7 +4,7 @@ import { Signal } from 'signal-polyfill';
  * Store a single value. Values can be read or replaced. Use `swap` to replace
  * the value inside an action.
  *
- * Reading state in a selector or effect will subscribe to changes.
+ * Reading state in a computed or effect will subscribe to changes.
  */
 export const atom = <Value>(initialState: Value): Atom<Value> =>
   Object.defineProperties({} as Atom<Value>, {

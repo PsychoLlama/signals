@@ -1,5 +1,5 @@
 import { useSyncExternalStore, useMemo } from 'react';
-import { Selector, Atom, Signal } from '@pl-beta/signals';
+import { Computed, Atom, Signal } from '@pl-beta/signals';
 
 let pendingChanges: Array<() => void> = [];
 
@@ -9,10 +9,10 @@ function flushPendingChanges() {
 }
 
 /**
- * Get the value of an atom or selector and subscribe to changes.
+ * Get the value of an atom or computed and subscribe to changes.
  */
 export const useSelector = <Value>(
-  store: Atom<Value> | Selector<Value>
+  store: Atom<Value> | Computed<Value>
 ): Value => {
   const [subscribe, getSnapshot] = useMemo(() => {
     const getSnapshot = () => store._c.get();

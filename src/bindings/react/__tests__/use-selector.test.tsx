@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { render, act } from '@testing-library/react';
-import { atom, action, swap, selector, Atom, get } from '../../../';
+import { atom, action, swap, computed, Atom, get } from '../../../';
 import { useSelector } from '../';
 
 describe('useSelector', () => {
@@ -56,7 +56,7 @@ describe('useSelector', () => {
   it('detects changes on derived values', async () => {
     const { result, setMessage } = setup(($msg) => {
       const derived = React.useMemo(
-        () => selector(() => get($msg).toUpperCase()),
+        () => computed(() => get($msg).toUpperCase()),
         []
       );
 
