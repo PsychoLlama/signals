@@ -12,7 +12,8 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "@testing-library/jest-dom/vitest"],
+    "jsx": "react",
     "paths": {
       "@pl-beta/signals": ["./src/index.ts"]
     }

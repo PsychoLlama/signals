@@ -7,5 +7,6 @@ export default defineConfig({
       include: ['src'],
     },
     exclude: [...configDefaults.exclude, '.direnv/**'],
+    setupFiles: ['@testing-library/jest-dom/vitest'],
   },
 });
