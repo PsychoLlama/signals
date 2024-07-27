@@ -1,6 +1,6 @@
 {
   "name": "@blabbing/signals",
-  "version": "0.0.0-rc.4",
+  "version": "0.0.0",
   "description": "A reactive state management tool",
   "author": "Jesse Gibson <JesseTheGibson@gmail.com>",
   "license": "MIT",
@@ -50,10 +50,11 @@
   ],
   "scripts": {
     "prepare": "vite build",
-    "test": "./bin/run-tests",
+    "test": "./scripts/run-tests",
     "test:unit": "vitest",
     "test:lint": "eslint src --color",
-    "test:fmt": "prettier --check src"
+    "test:fmt": "prettier --check src",
+    "release:candidate": "./scripts/publish-rc"
   },
   "prettier": {
     "singleQuote": true,
