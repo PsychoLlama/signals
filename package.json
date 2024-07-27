@@ -54,7 +54,9 @@
     "test:unit": "vitest",
     "test:lint": "eslint src --color",
     "test:fmt": "prettier --check src",
-    "release:candidate": "./scripts/publish-rc"
+    "print-pkg-version": "echo ${npm_package_version}",
+    "release:candidate": "./scripts/publish-rc",
+    "release:stable": "./scripts/publish-stable"
   },
   "prettier": {
     "singleQuote": true,
@@ -69,6 +71,7 @@
     "eslint": "^8.57.0",
     "immer": "^10.1.1",
     "jsdom": "^24.1.0",
+    "keep-a-changelog": "^2.5.3",
     "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",
     "react": "^18.3.1",
