@@ -1,4 +1,5 @@
 import { atom, action, get } from '@pl-beta/signals';
+import { type Producer } from 'immer';
 import { patch, nothing } from '../';
 
 describe('patch', () => {
@@ -21,10 +22,15 @@ describe('patch', () => {
   });
 
   it('can replace the value with nothing', () => {
-    const $value = atom<undefined | string>('content');
+    type Value = undefined | string;
+    const $value = atom<Value>('content');
+
+    // Unclear why: TS refuses `nothing` unless you explicitly annotate. Maybe
+    // it considers it to be a different symbol.
+    const producer: Producer<Value> = () => nothing;
 
     const unset = action(() => {
-      patch($value, () => nothing);
+      patch($value, producer);
     });
 
     unset();
