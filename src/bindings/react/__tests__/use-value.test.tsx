@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { render, act } from '@testing-library/react';
-import { atom, action, swap, computed, Atom, get } from '@pl-beta/signals';
+import { atom, action, swap, computed, Atom, get } from '@blabbing/signals';
 import { useValue } from '../';
 
 describe('useValue', () => {

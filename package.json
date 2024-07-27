@@ -1,5 +1,5 @@
 {
-  "name": "@pl-beta/signals",
+  "name": "@blabbing/signals",
   "version": "0.0.0-rc.4",
   "description": "A reactive state management tool",
   "author": "Jesse Gibson <JesseTheGibson@gmail.com>",

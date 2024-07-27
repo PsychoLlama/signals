@@ -1,4 +1,4 @@
-import { atom, action, get } from '@pl-beta/signals';
+import { atom, action, get } from '@blabbing/signals';
 import { type Producer } from 'immer';
 import { patch, nothing } from '../';
 
