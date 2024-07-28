@@ -1,6 +1,6 @@
 {
   "name": "@blabbing/signals",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A reactive state management tool",
   "author": "Jesse Gibson <JesseTheGibson@gmail.com>",
   "license": "MIT",
