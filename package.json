@@ -68,7 +68,7 @@
     "@testing-library/react": "^16.0.0",
     "@types/eslint__js": "^8.42.3",
     "@types/react": "^18.3.3",
-    "eslint": "^8.57.0",
+    "eslint": "^9.0.0",
     "immer": "^10.1.1",
     "jsdom": "^24.1.0",
     "keep-a-changelog": "^2.5.3",
