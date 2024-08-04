@@ -5,7 +5,7 @@ import type { Atom } from './atom';
  * Replace the current state of an atom. Can only be executed inside
  * a transaction. If the transaction fails, the value is reverted.
  */
-export const swap = <Value>(atom: Atom<Value>, newState: Value): void => {
+export const swap = <Value>(atom: Sink<Value>, newState: Value): void => {
   const { _s: staged, _c: state } = atom;
 
   if (finalizationQueue === null) {
@@ -22,3 +22,6 @@ export const swap = <Value>(atom: Atom<Value>, newState: Value): void => {
     }
   });
 };
+
+/** A writable sink, such as an atom. */
+export type Sink<Value> = Atom<Value>;

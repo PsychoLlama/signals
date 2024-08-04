@@ -5,10 +5,13 @@ import { finalizationQueue } from './transaction';
 /**
  * Get the value of an atom or computed.
  */
-export const get = <Value>(store: Atom<Value> | Computed<Value>): Value => {
+export const get = <Value>(source: Source<Value>): Value => {
   if (finalizationQueue === null) {
-    return store._c.get();
+    return source._c.get();
   }
 
-  return store._s.get();
+  return source._s.get();
 };
+
+/** A reactive source, such as an atom or computed value. */
+export type Source<Value> = Atom<Value> | Computed<Value>;
