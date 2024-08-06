@@ -6,14 +6,15 @@ import {
 
 /**
  * Transactionally apply a set of changes. Actions should happen in response
- * to IO events. They cannot be nested.
+ * to IO events.
  */
 export const action = <Params extends Array<unknown>, ReturnValue>(
   handler: (...args: Params) => ReturnValue
 ): Action<Params, ReturnValue> => {
   const transaction = (...params: Params) => {
     if (finalizationQueue !== null) {
-      throw new Error('Actions cannot be used inside other actions.');
+      // Only commit in the top level action.
+      return handler(...params);
     }
 
     try {
