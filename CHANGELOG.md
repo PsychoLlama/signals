@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - New `Source` and `Sink` types describe readable or writable values without giving concrete terms.
+- New `external(...)` data source for reading values from the outside world.
 
 ### Changed
 
