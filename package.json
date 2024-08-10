@@ -5,6 +5,7 @@
   "author": "Jesse Gibson <JesseTheGibson@gmail.com>",
   "license": "MIT",
   "type": "module",
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
@@ -95,5 +96,6 @@
     "react": {
       "optional": true
     }
-  }
+  },
+  "$schema": "https://json.schemastore.org/package"
 }
