@@ -1,5 +1,5 @@
 import { Signal } from 'signal-polyfill';
-import { atom, action, computed, get, swap } from '../';
+import { atom, action, computed, get, swap, external } from '../';
 
 describe('computed', () => {
   it('returns the computed state', () => {
@@ -102,5 +102,30 @@ describe('computed', () => {
     // inside a transaction in order to use the staged values without altering
     // dependencies of the outer computed.
     await expect(update()).resolves.not.toBe(get($value));
+  });
+
+  // BUG: Unclear how to solve it. External sources are non-volatile while
+  // observed but volatile when untracked. The computed caches outputs
+  // regardless. This means the value of a computed is correct when watched,
+  // but subject to drift when read outside an observer.
+  it.skip('does not cache outputs from volatile values', () => {
+    let value = 'initial';
+    const emitter = new EventTarget();
+    const $external = external(
+      () => value,
+      (onChange) => {
+        emitter.addEventListener('change', onChange);
+        return () => {
+          emitter.removeEventListener('change', onChange);
+        };
+      }
+    );
+
+    const $value = computed(() => get($external));
+    expect(get($value)).toBe('initial');
+
+    value = 'changed';
+    emitter.dispatchEvent(new Event('change'));
+    expect(get($value)).toBe('changed');
   });
 });
