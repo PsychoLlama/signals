@@ -11,11 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - New `Source` and `Sink` types describe readable or writable values without giving concrete terms.
 - New `external(...)` data source for reading values from the outside world.
 - New `behavior(...)` sink for performing effects.
-- New `suspendEffects(...)` tool for deferring side effects in actions.
 
 ### Changed
 
-- Removed restriction around nesting `action()` calls.
+- Actions return promises now. The promise resolves when behaviors finish running.
 
 ## [0.0.1] - 2024-07-28
 

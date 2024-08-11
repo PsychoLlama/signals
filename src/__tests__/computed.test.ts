@@ -17,7 +17,7 @@ describe('computed', () => {
     expect(get($value)).toBe(get($value));
   });
 
-  it('detects changes to the source atoms', () => {
+  it('detects changes to the source atoms', async () => {
     const $count = atom(0);
     const $add1 = computed(() => get($count) + 1);
 
@@ -33,11 +33,11 @@ describe('computed', () => {
     });
 
     expect(spy).not.toHaveBeenCalled();
-    update();
+    await update();
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('does not detect changes from failed transactions', () => {
+  it('does not detect changes from failed transactions', async () => {
     const $count = atom(0);
     const $add1 = computed(() => get($count) + 1);
 
@@ -54,11 +54,11 @@ describe('computed', () => {
     });
 
     expect(spy).not.toHaveBeenCalled();
-    expect(() => update()).toThrow('Abort');
+    await expect(update()).rejects.toThrow('Abort');
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('maintains consistent dependencies through transactions', () => {
+  it('maintains consistent dependencies through transactions', async () => {
     const $count = atom(0);
     const $add1 = computed(() => get($count) + 1);
 
@@ -80,13 +80,13 @@ describe('computed', () => {
     });
 
     expect(changeDetector).not.toHaveBeenCalled();
-    expect(() => update(true)).toThrow('Abort');
+    await expect(update(true)).rejects.toThrow('Abort');
     expect(changeDetector).not.toHaveBeenCalled();
-    update(false);
+    await expect(update(false)).resolves.not.toThrow();
     expect(changeDetector).toHaveBeenCalled();
   });
 
-  it('caches values between invocations inside transactions', () => {
+  it('caches values between invocations inside transactions', async () => {
     const $value = computed(() => {
       return { object: 'equal' };
     });
@@ -96,11 +96,11 @@ describe('computed', () => {
       return get($value);
     });
 
-    expect(update).not.toThrow();
+    await expect(update()).resolves.not.toThrow();
 
     // Testing internal implementation: A different computed is used if you're
     // inside a transaction in order to use the staged values without altering
     // dependencies of the outer computed.
-    expect(update()).not.toBe(get($value));
+    await expect(update()).resolves.not.toBe(get($value));
   });
 });

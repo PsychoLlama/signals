@@ -28,7 +28,7 @@ describe('useValue', () => {
       result,
       setMessage: async (msg: string) => {
         await act(async () => {
-          setMessage(msg);
+          await setMessage(msg);
           await Promise.resolve(); // Wait for watcher microtask.
         });
       },

@@ -11,7 +11,7 @@ describe('behavior', () => {
     expect(fail).toThrow(/applied in an action/);
   });
 
-  it('runs effects after committing the action', () => {
+  it('runs effects after committing the action', async () => {
     const spy = vi.fn();
     const effect = behavior<boolean>(spy);
 
@@ -20,11 +20,11 @@ describe('behavior', () => {
     });
 
     expect(spy).not.toHaveBeenCalled();
-    expect(run).not.toThrow();
+    await expect(run()).resolves.not.toThrow();
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('does not run effects if the transaction fails', () => {
+  it('does not run effects if the transaction fails', async () => {
     const spy = vi.fn();
     const effect = behavior<boolean>(spy);
 
@@ -34,11 +34,11 @@ describe('behavior', () => {
     });
 
     expect(spy).not.toHaveBeenCalled();
-    expect(run).toThrow('Abort');
+    await expect(run()).rejects.toThrow('Abort');
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('only runs the effect once with the most recent value', () => {
+  it('only runs the effect once with the most recent value', async () => {
     const spy = vi.fn();
     const effect = behavior<number>(spy);
 
@@ -48,18 +48,19 @@ describe('behavior', () => {
     });
 
     expect(spy).not.toHaveBeenCalled();
-    expect(run).not.toThrow();
+    await expect(run()).resolves.not.toThrow();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(2);
   });
 
-  it('does not re-run effects if another action cycle runs inside the effect', () => {
+  it('does not leak effects from one action to the next', async () => {
     const spy = vi.fn();
     const first = behavior<boolean>(() => {
       spy('first');
 
-      // IMO this is a code smell, but it's valid.
-      action(() => {
+      // IMO synchronously dispatching another action is a code smell, but
+      // it's allowed.
+      return action(() => {
         swap(second, true);
       })();
     });
@@ -73,7 +74,7 @@ describe('behavior', () => {
     });
 
     expect(spy).not.toHaveBeenCalled();
-    expect(run).not.toThrow();
+    await expect(run()).resolves.not.toThrow();
     expect(spy).toHaveBeenCalledTimes(2);
     expect(spy).toHaveBeenCalledWith('first');
     expect(spy).toHaveBeenCalledWith('second');

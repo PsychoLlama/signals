@@ -16,7 +16,7 @@ describe('atom', () => {
     expect(fail).toThrow(/only be applied in an action/);
   });
 
-  it('can replace the current state', () => {
+  it('can replace the current state', async () => {
     const $count = atom(0);
 
     const update = action(() => {
@@ -24,24 +24,24 @@ describe('atom', () => {
     });
 
     expect(get($count)).toBe(0);
-    update();
+    await expect(update()).resolves.not.toThrow();
     expect(get($count)).toBe(1);
   });
 
-  it('does not commit changes if the action fails', () => {
+  it('does not commit changes if the action fails', async () => {
     const $count = atom(0);
 
     const update = action(() => {
       swap($count, 1);
-      throw new Error('fail');
+      throw new Error('Testing action errors');
     });
 
     expect(get($count)).toBe(0);
-    expect(update).toThrow('fail');
+    await expect(update()).rejects.toThrow('Testing action errors');
     expect(get($count)).toBe(0);
   });
 
-  it('notifies watchers when changes occur', () => {
+  it('notifies watchers when changes occur', async () => {
     const $count = atom(0);
     const selector = new Signal.Computed(() => get($count));
     selector.get(); // Initialize selector dependencies.
@@ -53,11 +53,11 @@ describe('atom', () => {
     const increment = action(() => swap($count, get($count) + 1));
 
     expect(spy).not.toHaveBeenCalled();
-    increment();
+    await expect(increment()).resolves.not.toThrow();
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('does not notify watchers if the transaction was aborted', () => {
+  it('does not notify watchers if the transaction was aborted', async () => {
     const $count = atom(0);
     const selector = new Signal.Computed(() => get($count));
     selector.get(); // Initialize selector dependencies.
@@ -72,13 +72,13 @@ describe('atom', () => {
     });
 
     expect(spy).not.toHaveBeenCalled();
-    expect(increment).toThrow('fail');
+    await expect(increment()).rejects.toThrow('fail');
     expect(spy).not.toHaveBeenCalled();
   });
 
   // This appears to be the default behavior, but it's crucial enough to
   // verify through tests.
-  it('does not notify watchers if the new value is identical', () => {
+  it('does not notify watchers if the new value is identical', async () => {
     const $count = atom(0);
     const selector = new Signal.Computed(() => get($count));
     selector.get(); // Initialize selector dependencies.
@@ -92,11 +92,11 @@ describe('atom', () => {
     });
 
     expect(spy).not.toHaveBeenCalled();
-    setToSameValue();
+    await expect(setToSameValue()).resolves.not.toThrow();
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('reflects the uncommitted state while in a transaction', () => {
+  it('reflects the uncommitted state while in a transaction', async () => {
     const $count = atom(0);
 
     const update = action(() => {
@@ -107,11 +107,11 @@ describe('atom', () => {
     });
 
     expect(get($count)).toBe(0);
-    update();
+    await expect(update()).resolves.not.toThrow();
     expect(get($count)).toBe(2);
   });
 
-  it('resets uncommitted states between transactions', () => {
+  it('resets uncommitted states between transactions', async () => {
     const $msg = atom('initial');
 
     const update = action(() => {
@@ -120,7 +120,7 @@ describe('atom', () => {
       throw new Error('aborting action');
     });
 
-    expect(update).toThrow(/aborting action/);
-    expect(update).toThrow(/aborting action/);
+    await expect(update()).rejects.toThrow(/aborting action/);
+    await expect(update()).rejects.toThrow(/aborting action/);
   });
 });

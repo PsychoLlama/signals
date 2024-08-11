@@ -3,7 +3,7 @@ import { type Producer } from 'immer';
 import { patch, nothing } from '../';
 
 describe('patch', () => {
-  it('updates the value immutably', () => {
+  it('updates the value immutably', async () => {
     const initialValue = { msg: 'initial' };
     const $value = atom(initialValue);
 
@@ -14,14 +14,14 @@ describe('patch', () => {
     });
 
     expect(get($value)).toHaveProperty('msg', 'initial');
-    update('updated');
+    await update('updated');
     expect(get($value)).toHaveProperty('msg', 'updated');
 
     // Make sure it wasn't mutated.
     expect(initialValue.msg).toBe('initial');
   });
 
-  it('can replace the value with nothing', () => {
+  it('can replace the value with nothing', async () => {
     type Value = undefined | string;
     const $value = atom<Value>('content');
 
@@ -33,7 +33,7 @@ describe('patch', () => {
       patch($value, producer);
     });
 
-    unset();
+    await unset();
     expect(get($value)).toBeUndefined();
   });
 });

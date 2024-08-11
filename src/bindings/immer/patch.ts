@@ -1,5 +1,5 @@
 import { produce, type Producer } from 'immer';
-import { get, swap, type Sink } from '@blabbing/signals';
+import { get, swap, type Atom } from '@blabbing/signals';
 
 /**
  * Immutably update the value of an atom using imperative syntax.
@@ -7,7 +7,7 @@ import { get, swap, type Sink } from '@blabbing/signals';
  * NOTE: This requires `immer` to be installed.
  */
 export const patch = <Value>(
-  store: Sink<Value>,
+  store: Atom<Value>, // TODO: Support behaviors.
   recipe: Producer<Value>
 ): void => {
   swap(store, produce(get(store), recipe));

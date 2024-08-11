@@ -5,24 +5,29 @@ import {
 } from './transaction';
 
 /**
- * Transactionally apply a set of changes. Actions should happen in response
- * to IO events.
+ * Respond to an IO event by updating state. If an action fails, pending
+ * changes are not committed.
+ *
+ * Actions can trigger effects by writing to "behaviors". Behaviors execute
+ * after the action completes, and the promise that is returned resolves when
+ * those behaviors finish executing.
  */
 export const action = <Params extends Array<unknown>, ReturnValue>(
   handler: (...args: Params) => ReturnValue
 ): Action<Params, ReturnValue> => {
-  const transaction = (...params: Params) => {
+  const transaction = async (...params: Params): Promise<ReturnValue> => {
     if (finalizationQueue !== null) {
-      // Only commit in the top level action.
-      return handler(...params);
+      throw new Error('Actions cannot call other actions.');
     }
 
     try {
       startTransaction();
-      const result = handler(...params);
-      finishTransaction(true);
+      const actionReturnValue = handler(...params);
 
-      return result;
+      const runEffects = finishTransaction(true);
+      await runEffects();
+
+      return actionReturnValue;
     } catch (error) {
       finishTransaction(false);
       throw error;
@@ -33,5 +38,5 @@ export const action = <Params extends Array<unknown>, ReturnValue>(
 };
 
 export interface Action<Params extends Array<unknown>, ReturnValue> {
-  (...args: Params): ReturnValue;
+  (...args: Params): Promise<ReturnValue>;
 }
