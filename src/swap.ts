@@ -1,27 +1,32 @@
-import { finalizationQueue } from './transaction';
+import { finalizationQueue, effectQueue } from './transaction';
 import type { Atom } from './atom';
+import type { Behavior } from './behavior';
+import { BRAND } from './brand';
 
 /**
  * Replace the current state of an atom. Can only be executed inside
  * a transaction. If the transaction fails, the value is reverted.
  */
-export const swap = <Value>(atom: Sink<Value>, newState: Value): void => {
-  const { _s: staged, _c: state } = atom;
-
-  if (finalizationQueue === null) {
-    throw new Error('Atoms can only be updated in an action().');
+export const swap = <Value>(sink: Sink<Value>, newState: Value): void => {
+  if (finalizationQueue === null || effectQueue === null) {
+    throw new Error('Changes can only be applied in an action().');
   }
 
-  staged.set(newState);
+  if (sink[BRAND] === 'A') {
+    const { _s: staged, _c: state } = sink;
+    staged.set(newState);
 
-  finalizationQueue.push((shouldCommit) => {
-    if (shouldCommit) {
-      state.set(newState);
-    } else {
-      staged.set(state.get());
-    }
-  });
+    finalizationQueue.set(sink as Atom<unknown>, (shouldCommit) => {
+      if (shouldCommit) {
+        state.set(newState);
+      } else {
+        staged.set(state.get());
+      }
+    });
+  } else {
+    effectQueue.set(sink as Behavior<unknown>, () => sink._e(newState));
+  }
 };
 
 /** A writable sink, such as an atom. */
-export type Sink<Value> = Atom<Value>;
+export type Sink<Value> = Atom<Value> | Behavior<Value>;

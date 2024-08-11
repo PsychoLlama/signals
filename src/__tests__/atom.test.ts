@@ -13,7 +13,7 @@ describe('atom', () => {
     const $count = atom(0);
     const fail = () => swap($count, 1);
 
-    expect(fail).toThrow(/only be updated in an action/);
+    expect(fail).toThrow(/only be applied in an action/);
   });
 
   it('can replace the current state', () => {
