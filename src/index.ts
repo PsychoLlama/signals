@@ -6,4 +6,5 @@ export { behavior } from './behavior';
 export { computed, type Computed } from './computed';
 export { external } from './external';
 export { get, type Source } from './get';
+export { suspendEffects } from './transaction';
 export { swap, type Sink } from './swap';
