@@ -1,6 +1,11 @@
-# Signal Transactions
+<div align="center">
+  <h2>Signal Transactions</h2>
+  <p>State Machine 🤝 Spreadsheet Engine</p>
+</div>
 
-A wrapper providing transactional atomicity over [The JS Signals Proposal](https://github.com/tc39/proposal-signals).
+<p align="center">
+  A wrapper providing transactional atomicity and an effect model over <a href="https://github.com/tc39/proposal-signals">The JS Signals Proposal</a>.
+</p>
 
 ## Project Status
 
@@ -35,6 +40,8 @@ const increment = action((amount) => {
   swap($count, get($count) + amount);
 });
 ```
+
+Updates are executed in "actions", a batch of changes that apply all at once or not at all.
 
 The `Signal` API is exported for advanced cases, such as custom bindings or watchers. See the React binding for an example.
 
