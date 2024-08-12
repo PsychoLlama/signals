@@ -13,6 +13,12 @@
 
 I'm using this in personal projects. There are rough edges and the API is constantly evolving. I might abandon it.
 
+## Philosophy
+
+- State changes should only happen in response to IO events or errors.
+- Changes should be batched and atomic.
+- **Gather**, **Plan**, **Execute**: Effects run by gathering inputs, planning a change, and executing the plan.
+
 ## Installing
 
 ```bash
@@ -44,6 +50,34 @@ const increment = action((amount) => {
 Updates are executed in "actions", a batch of changes that apply all at once or not at all.
 
 The `Signal` API is exported for advanced cases, such as custom bindings or watchers. See the React binding for an example.
+
+### External Sources
+
+For data sources that change over time, you can bind with the `external(...)` API:
+
+```ts
+const $visibility = external(
+  () => document.visibilityState,
+  (onChange) => {
+    document.addEventListener('visibilitychange', onChange);
+    return () => document.removeEventListener('visibilitychange', onChange);
+  }
+);
+```
+
+### Behaviors
+
+Behaviors are the effect system. They are writable values inside actions and run when the action commits.
+
+```ts
+const useDarkTheme = action(() => {
+  swap(theme, 'dark');
+});
+
+const theme = behavior((value: string) => {
+  localStorage.setItem('theme', value);
+});
+```
 
 ## Bindings
 
