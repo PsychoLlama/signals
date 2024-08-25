@@ -22,10 +22,12 @@ export const finishTransaction = (
 
   return function runEffects() {
     return Promise.all(
-      [...scheduledEffects.values()].map((effect) => effect())
+      [...scheduledEffects].map(([behavior, instruction]) =>
+        behavior._e(instruction)
+      )
     );
   };
 };
 
-type EffectQueue = Map<Behavior<unknown>, () => void | Promise<void>>;
+type EffectQueue = Map<Behavior<unknown>, unknown>;
 type FinalizationQueue = Map<Atom<unknown>, (commit: boolean) => void>;

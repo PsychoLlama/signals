@@ -24,7 +24,7 @@ export const swap = <Value>(sink: Sink<Value>, newState: Value): void => {
       }
     });
   } else {
-    effectQueue.set(sink as Behavior<unknown>, () => sink._e(newState));
+    effectQueue.set(sink as Behavior<unknown>, newState);
   }
 };
 
