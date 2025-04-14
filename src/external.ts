@@ -18,34 +18,12 @@ export const external = <Value>(
    */
   subscribe: (onChange: () => void) => Unsubscribe
 ): ExternalSource<Value> => {
-  let unsubscribe: () => void;
-
-  const onChange = () => {
-    stateVersion.set(stateVersion.get() + 1);
-  };
-
-  // We don't store the value in a signal. `getSnapshot()` is the source of
-  // truth. The state version is used to notify watchers when a new value is
-  // available from `getSnapshot()`.
-  const stateVersion = new Signal.State(0, {
-    [Signal.subtle.watched]() {
-      unsubscribe = subscribe(onChange);
-    },
-
-    [Signal.subtle.unwatched]() {
-      unsubscribe();
-    },
-  });
+  const source = new Signal.Volatile(getSnapshot, { subscribe });
 
   return Object.defineProperties({} as ExternalSource<Value>, {
     [BRAND]: { value: 'E' },
-    _c: { value: stateVersion },
-    _g: {
-      value() {
-        stateVersion.get();
-        return getSnapshot();
-      },
-    },
+    _s: { value: source },
+    _c: { value: source },
   });
 };
 
@@ -57,16 +35,16 @@ export interface ExternalSource<Value> {
   [BRAND]: 'E';
 
   /**
-   * State version.
+   * Staged value used in transactions.
    * @private
    */
-  _c: Signal.State<number>;
+  _s: Signal.Volatile<Value>;
 
   /**
    * Get a snapshot of the current value.
    * @private
    */
-  _g: () => Value;
+  _c: Signal.Volatile<Value>;
 }
 
 type Unsubscribe = () => void;
