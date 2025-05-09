@@ -108,7 +108,7 @@ describe('computed', () => {
   // observed but volatile when untracked. The computed caches outputs
   // regardless. This means the value of a computed is correct when watched,
   // but subject to drift when read outside an observer.
-  it.skip('does not cache outputs from volatile values', () => {
+  it('does not cache outputs from volatile values', () => {
     let value = 'initial';
     const emitter = new EventTarget();
     const $external = external(
