@@ -82,7 +82,7 @@
     "vitest": "^3.0.0"
   },
   "dependencies": {
-    "signal-polyfill": "^0.1.1"
+    "signal-polyfill": "^0.2.0"
   },
   "peerDependencies": {
     "immer": ">=10.0.0",
