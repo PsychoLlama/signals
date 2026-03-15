@@ -15,7 +15,7 @@
     "types": ["vitest/globals", "@testing-library/jest-dom/vitest", "node"],
     "jsx": "react",
     "paths": {
-      "@blabbing/signals": ["./src/index.ts"]
+      "@babbling/signals": ["./src/index.ts"]
     }
   }
 }

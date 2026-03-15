@@ -1,5 +1,5 @@
 import { produce, type Producer } from 'immer';
-import { get, swap, type Atom } from '@blabbing/signals';
+import { get, swap, type Atom } from '@babbling/signals';
 
 /**
  * Immutably update the value of an atom using imperative syntax.

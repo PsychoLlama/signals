@@ -22,13 +22,13 @@ I'm using this in personal projects. There are rough edges and the API is consta
 ## Installing
 
 ```bash
-npm install --save @blabbing/signals
+npm install --save @babbling/signals
 ```
 
 To use the bleeding edge version from the `main` branch, use the `@rc` tag (release candidate):
 
 ```bash
-npm install --save @blabbing/signals@rc
+npm install --save @babbling/signals@rc
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ npm install --save @blabbing/signals@rc
 Everything is built around atoms. Atoms are reactive values that can be read and updated.
 
 ```ts
-import { atom, swap, get } from '@blabbing/signals';
+import { atom, swap, get } from '@babbling/signals';
 
 const $count = atom(0);
 
@@ -87,8 +87,8 @@ A few bindings are exposed for popular packages. They're optional and assume you
 
 ```ts
 // React
-import { atom } from '@blabbing/signals';
-import { useValue } from '@blabbing/signals/react';
+import { atom } from '@babbling/signals';
+import { useValue } from '@babbling/signals/react';
 
 const $count = atom(0);
 
@@ -101,8 +101,8 @@ export function Counter() {
 ### Immer
 
 ```ts
-import { atom, action } from '@blabbing/signals';
-import { update } from '@blabbing/signals/immer';
+import { atom, action } from '@babbling/signals';
+import { update } from '@babbling/signals/immer';
 
 const $state = atom({ count: 0 });
 

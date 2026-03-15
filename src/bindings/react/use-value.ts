@@ -1,5 +1,5 @@
 import { useSyncExternalStore, useMemo } from 'react';
-import { get, Signal, type Source } from '@blabbing/signals';
+import { get, Signal, type Source } from '@babbling/signals';
 
 let pendingChanges: Array<() => void> = [];
 
