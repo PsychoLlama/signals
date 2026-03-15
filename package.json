@@ -6,9 +6,6 @@
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
-  "publishConfig": {
-    "access": "public"
-  },
   "exports": {
     ".": {
       "require": {
@@ -54,10 +51,7 @@
     "test": "./scripts/run-tests",
     "test:unit": "vitest",
     "test:lint": "eslint src --color",
-    "test:fmt": "prettier --check src",
-    "print-pkg-version": "echo ${npm_package_version}",
-    "release:candidate": "./scripts/publish-rc",
-    "release:stable": "./scripts/publish-stable"
+    "test:fmt": "prettier --check src"
   },
   "prettier": {
     "singleQuote": true,
@@ -73,7 +67,6 @@
     "eslint": "^9.0.0",
     "immer": "^10.1.1",
     "jsdom": "^26.0.0",
-    "keep-a-changelog": "^2.5.3",
     "prettier": "^3.1.0",
     "react": "^18.3.1",
     "typescript": "^5.4.5",
