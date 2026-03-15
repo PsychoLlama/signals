@@ -9,9 +9,9 @@
 
 ## Project Status
 
-:scientist: Experimental
+:no_entry: ABANDONED
 
-I'm using this in personal projects. There are rough edges and the API is constantly evolving. I might abandon it.
+It was a fun experiment. I'm continuing exploration in [retreon/cells](https://github.com/retreon/cells) (my own signals implementation). I've given up jamming signals into React and moved to platforms where it's first class.
 
 ## Philosophy
 
