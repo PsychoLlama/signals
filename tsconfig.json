@@ -12,7 +12,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "types": ["vitest/globals", "@testing-library/jest-dom/vitest"],
+    "types": ["vitest/globals", "@testing-library/jest-dom/vitest", "node"],
     "jsx": "react",
     "paths": {
       "@blabbing/signals": ["./src/index.ts"]
